@@ -1,9 +1,10 @@
-#include "OrderBook.h"
-#include "Trade.h"
+#include "core/OrderBook.h"
+#include "core/Trade.h"
 #include <iostream>
 #include <algorithm>
 
 void OrderBook::addOrder(Order order) {
+    lastTrades.clear();
     if(order.getType()==OrderType::FOK && !canFullyMatch(order)) return;
     matchOrder(order);
     if(order.getQuantity()==0) return;
@@ -128,6 +129,7 @@ void OrderBook::matchOrder(Order& incomingOrder) {
                 tradeQuantity
             };
             trades.push_back(trade);
+            lastTrades.push_back(trade);
             restingOrder.reduceQuantity(tradeQuantity);
             incomingOrder.reduceQuantity(tradeQuantity);
             
@@ -160,6 +162,7 @@ void OrderBook::matchOrder(Order& incomingOrder) {
                 tradeQuantity
             };
             trades.push_back(trade);
+            lastTrades.push_back(trade);
             restingOrder.reduceQuantity(tradeQuantity);
             incomingOrder.reduceQuantity(tradeQuantity);
             
@@ -223,4 +226,8 @@ void OrderBook::printSellBook() const {
 void OrderBook::printOrderBook() const {
     printBuyBook();
     printSellBook();
+}
+
+const std::vector<Trade>& OrderBook::getLastTrades() const {
+    return lastTrades;
 }

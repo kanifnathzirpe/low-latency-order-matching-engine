@@ -24,6 +24,7 @@ class OrderBook {
         std::vector<Trade> trades;
         bool canFullyMatch(const Order& order) const;
         void matchOrder(Order& incomingOrder);
+        std::vector<Trade> lastTrades;
 
     public:
         void addOrder(Order order);
@@ -31,6 +32,8 @@ class OrderBook {
         bool modifyOrder(std::uint64_t orderId, double newPrice, uint32_t newQuantity);
         std::size_t getTradeCount() const;
         
+        const std::vector<Trade>& getLastTrades() const;
+
         void printTrades() const;
         void printBuyBook() const;
         void printSellBook() const;
