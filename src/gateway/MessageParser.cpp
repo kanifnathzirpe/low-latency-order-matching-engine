@@ -1,12 +1,13 @@
 #include "gateway/MessageParser.h"
+
 #include <sstream>
 #include <vector>
-#include <iostream>
 
 MessageParser::MessageParser()
     : nextOrderId(1),
       timestamp(1)
-{}
+{
+}
 
 std::optional<Order> MessageParser::parse(const std::string& message)
 {
@@ -71,14 +72,18 @@ std::optional<Order> MessageParser::parse(const std::string& message)
         if (type == OrderType::Market)
         {
             if (tokens.size() != 3)
+            {
                 return std::nullopt;
+            }
 
             quantity = std::stoul(tokens[2]);
         }
         else
         {
             if (tokens.size() != 4)
+            {
                 return std::nullopt;
+            }
 
             price = std::stod(tokens[2]);
             quantity = std::stoul(tokens[3]);
@@ -89,13 +94,19 @@ std::optional<Order> MessageParser::parse(const std::string& message)
         return std::nullopt;
     }
 
+    const std::uint64_t orderId =
+        nextOrderId.fetch_add(1, std::memory_order_relaxed);
+
+    const std::uint64_t orderTimestamp =
+        timestamp.fetch_add(1, std::memory_order_relaxed);
+
     Order order(
-        nextOrderId++,
+        orderId,
         side,
         type,
         price,
         quantity,
-        timestamp++
+        orderTimestamp
     );
 
     return order;

@@ -2,10 +2,11 @@
 #define TCPCLIENT_H
 
 #include <string>
+#include "network/SocketTypes.h"
 
 class TcpClient {
     private:
-        int clientSocket;
+        SocketHandle clientSocket;
         std::string serverIP;
         int port;
     

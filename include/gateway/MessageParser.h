@@ -3,19 +3,20 @@
 
 #include <string>
 #include <optional>
+#include <atomic>
 
 #include "core/Order.h"
 
 class MessageParser
 {
-    private:
-        std::uint64_t nextOrderId;
-        std::uint64_t timestamp;
+private:
+    std::atomic<std::uint64_t> nextOrderId;
+    std::atomic<std::uint64_t> timestamp;
 
-    public:
-        MessageParser();
+public:
+    MessageParser();
 
-        std::optional<Order> parse(const std::string& message);
+    std::optional<Order> parse(const std::string& message);
 };
 
 #endif

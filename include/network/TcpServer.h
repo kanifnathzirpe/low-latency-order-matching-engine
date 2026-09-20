@@ -2,24 +2,35 @@
 #define TCPSERVER_H
 
 #include <string>
-class TcpServer {
-    private:
-        int serverSocket;
-        int clientSocket;
-        int port;
-    public:
-        explicit TcpServer(int port);
+#include "network/SocketTypes.h"
 
-        bool start();
+class TcpServer
+{
+private:
+    SocketHandle serverSocket;
+    int port;
 
-        bool acceptClient();
+public:
+    explicit TcpServer(int port);
 
-        void stop();
+    bool start();
 
-        bool receiveMessage(std::string& message);
+    SocketHandle acceptClient();
 
-        bool sendMessage(const std::string& message);
+    bool receiveMessage(
+        SocketHandle clientSocket,
+        std::string& message,
+        std::string& receiveBuffer
+    );
+
+    bool sendMessage(
+        SocketHandle clientSocket,
+        const std::string& message
+    );
+
+    void closeClient(SocketHandle clientSocket);
+
+    void stop();
 };
 
 #endif
-
